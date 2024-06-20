@@ -15,6 +15,10 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
+    colors: {
+      "grey-opacity": "rgba(104, 124, 148, 0.1)",
+      black: "#131315",
+    },
   },
   plugins: [daisyui],
   daisyui: {
@@ -24,8 +28,8 @@ const config: Config = {
           primary: "#10107B",
           secondary: "#FF5C81",
           lightblue: "#27A5EE",
-          bggrey: "#F8F8FA",
-          info: "#10107B",
+          info: "#F8F8FA",
+          // info: "#10107B",
         },
       },
     ],

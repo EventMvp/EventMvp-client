@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="mytheme">
-      <body className={inter.className}>{children}</body>
+      <body className={(inter.className, "bg-info")}>{children}</body>
     </html>
   );
 }
