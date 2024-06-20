@@ -18,6 +18,7 @@ const config: Config = {
     colors: {
       "grey-opacity": "rgba(104, 124, 148, 0.1)",
       black: "#131315",
+      white: "#F8F8FA",
     },
   },
   plugins: [daisyui],
