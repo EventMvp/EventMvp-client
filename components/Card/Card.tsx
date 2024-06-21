@@ -10,7 +10,7 @@ const Card = () => {
       <div className="card-body p-4">
         <h2 className="card-title">
           Best Seller Book Storytelling
-          <div className="badge badge-primary">FREE</div>
+          <div className="badge-sm rounded-badge badge-primary">FREE</div>
         </h2>
         <p></p>
         <p>Monday, 24 June 2024</p>
