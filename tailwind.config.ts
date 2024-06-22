@@ -9,16 +9,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        "grey-opacity": "rgba(104, 124, 148, 0.1)",
+        black: "#131315",
+        white: "#F8F8FA",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-    },
-    colors: {
-      "grey-opacity": "rgba(104, 124, 148, 0.1)",
-      black: "#131315",
-      white: "#F8F8FA",
     },
   },
   plugins: [daisyui],

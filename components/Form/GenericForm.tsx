@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 
 interface FormField {
@@ -50,6 +50,7 @@ const GenericForm: React.FC<GenericFormProps> = ({
                 as={field.as || "input"}
                 className="text-black px-4 py-3 rounded-box"
               />
+              <ErrorMessage name={field.name} />
             </div>
           ))}
           <div className="pt-5">
