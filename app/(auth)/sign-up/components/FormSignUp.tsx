@@ -55,6 +55,7 @@ const FormSignUp = () => {
       fields={fields}
       onSubmit={handleSubmit}
       formTitle="Sign up to EventHive"
+      fieldClass="text-black px-4 py-3 rounded-box"
     />
   );
 };

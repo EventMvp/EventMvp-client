@@ -8,8 +8,14 @@ interface FormField {
   label: string;
   name: string;
   type: string;
+  options?: OptionsProps[];
   placeholder?: string;
   as?: string;
+}
+
+interface OptionsProps {
+  label: string;
+  value: string;
 }
 
 interface GenericFormProps {
@@ -17,7 +23,7 @@ interface GenericFormProps {
   validationSchema: Yup.ObjectSchema<any>;
   onSubmit: (values: any) => void;
   fields: FormField[];
-  formTitle: string;
+  fieldClass: string;
 }
 
 const GenericForm: React.FC<GenericFormProps> = ({
@@ -25,42 +31,61 @@ const GenericForm: React.FC<GenericFormProps> = ({
   validationSchema,
   onSubmit,
   fields,
-  formTitle,
+  fieldClass,
 }) => {
   return (
     <section className="px-4 py-5 flex flex-col items-center text-black">
-      <h1 className="text-3xl font-bold">{formTitle}</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}>
-        <Form className="pt-4 w-full">
-          {fields.map((field) => (
-            <div key={field.id} className="flex flex-col gap-3 pt-2">
-              <label
-                htmlFor={field.id}
-                className="text-sm font-light text-left pt-4">
-                {field.label}
-              </label>
-              <Field
-                id={field.id}
-                name={field.name}
-                type={field.type}
-                placeholder={field.placeholder}
-                as={field.as || "input"}
-                className="text-black px-4 py-3 rounded-box"
-              />
-              <ErrorMessage name={field.name} />
+        {({ values }) => (
+          <Form className="pt-4 w-full">
+            {fields.map((field) => (
+              <div key={field.id} className="flex flex-col gap-3 pt-2">
+                <label
+                  htmlFor={field.id}
+                  className="text-sm font-light text-left pt-4">
+                  {field.label}
+                </label>
+                {field.type === "radio" && field.options ? (
+                  <div className="flex gap-6">
+                    {field.options.map((option) => (
+                      <div key={option.value} className="flex">
+                        <Field
+                          type={field.type}
+                          id={option.value}
+                          name={field.name}
+                          value={option.value}
+                          checked={values[field.name] === option.value}
+                        />
+                        <label htmlFor={option.value} className="pl-2">
+                          {option.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <Field
+                    id={field.id}
+                    name={field.name}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    className={fieldClass}
+                  />
+                )}
+                <ErrorMessage name={field.name} />
+              </div>
+            ))}
+            <div className="pt-5">
+              <button
+                type="submit"
+                className="bg-primary text-white font-extralight text-lg py-2 px-4 mt-8 rounded-box">
+                Submit
+              </button>
             </div>
-          ))}
-          <div className="pt-5">
-            <button
-              type="submit"
-              className="bg-primary text-white font-extralight text-lg py-2 px-4 mt-8 rounded-box">
-              Submit
-            </button>
-          </div>
-        </Form>
+          </Form>
+        )}
       </Formik>
     </section>
   );

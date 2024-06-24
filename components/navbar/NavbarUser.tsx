@@ -31,6 +31,7 @@ const NavbarUser = () => {
       <div className="cursor-pointer text-xl pl-2">EventHive</div>
       <div className="flex gap-6">
         <p className="text-lg">Events</p>
+        <p className="text-lg">Redeem Points: POINTS</p>
         <div ref={dropdownRef} className="relative">
           <img
             src="https://placehold.co/40x40"
