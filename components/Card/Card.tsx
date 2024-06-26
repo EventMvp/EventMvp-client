@@ -1,4 +1,8 @@
-const Card = () => {
+import { Event } from "@/types/events";
+
+const Card: React.FC<Event> = ({ ...props }) => {
+  const { title, date } = props;
+
   return (
     <div className="card bg-base-100 shadow-xl">
       <figure>
@@ -9,11 +13,11 @@ const Card = () => {
       </figure>
       <div className="card-body p-4">
         <h2 className="card-title">
-          Best Seller Book Storytelling
+          {title}
           <div className="badge-sm rounded-badge badge-primary">FREE</div>
         </h2>
         <p></p>
-        <p>Monday, 24 June 2024</p>
+        <p>{date}</p>
         <div className="card-actions justify-end">
           <div className="badge badge-outline">Fashion</div>
           <div className="badge badge-outline">Products</div>

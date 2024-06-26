@@ -1,5 +1,5 @@
 import { getEvents } from "@/api/getEvents";
-import { GET_EVENTS } from "@/constants/querykey";
+import { GET_EVENTS } from "@/constants/queryKey";
 import { Event } from "@/types/events";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
