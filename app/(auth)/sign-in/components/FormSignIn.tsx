@@ -39,7 +39,7 @@ const FormSignIn = () => {
       validationSchema={validationSchema}
       fields={fields}
       onSubmit={handleSubmit}
-      formTitle="Sign in to EventHive"
+      fieldClass="text-black px-4 py-3 rounded-box"
     />
   );
 };
