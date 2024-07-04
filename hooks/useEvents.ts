@@ -1,31 +1,28 @@
 import { getCategory } from "@/api/getCategory";
+import { getFilteredEvents } from "@/api/getFilteredEvents";
 import { getEvents } from "@/api/getevents";
-import { GET_CATEGORY, GET_EVENTS } from "@/constants/queryKey";
+import {
+  GET_CATEGORY,
+  GET_EVENTS,
+  GET_FILTERED_EVENTS,
+} from "@/constants/queryKey";
 import { Event } from "@/types/events";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-interface EventMap {
-  [key: number]: Event;
-}
-
-interface EventCategoriesGroup {
-  [key: string]: Event[];
-}
-
-const useEvent = () => {
-  const {
-    data: events,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: [GET_EVENTS],
-    queryFn: async () => await getEvents(),
-    retry: false,
-  });
+const useEvent = (filters?: Record<string, any>) => {
+  // const {
+  //   data: events,
+  //   isLoading: isLoadingEvents,
+  //   error: errorEvents,
+  // } = useQuery({
+  //   queryKey: [GET_EVENTS],
+  //   queryFn: async () => await getEvents(),
+  //   retry: false,
+  // });
 
   const {
-    data: category,
+    data: categories,
     isLoading: isCategoryLoading,
     error: categoryError,
   } = useQuery({
@@ -34,33 +31,22 @@ const useEvent = () => {
     retry: false,
   });
 
-  const eventMap: EventMap = useMemo(() => {
-    const newMap: EventMap = {};
-    if (!events) return newMap;
-    events.map((event) => {
-      newMap[event.id] = event;
-    });
-    return newMap;
-  }, [events]);
+  const {
+    data: filteredEvents,
+    isLoading: isFilteredEventsLoading,
+    error: filteredEventsError,
+  } = useQuery({
+    queryKey: [GET_FILTERED_EVENTS, filters],
+    queryFn: async () => await getFilteredEvents(filters),
+    enabled: !!filters,
+  });
 
-  const categories: string[] = useMemo(() => {
-    if (!category) return [];
-
-    return category.map((cat) => cat.name);
-  }, [category]);
-
-  const eventCategoryGroup: EventCategoriesGroup = useMemo(() => {
-    const newGroup: EventCategoriesGroup = {};
-
-    if (!events) return {};
-    categories.forEach((category) => {
-      const eventList = events.filter((each) => each.category === category);
-      newGroup[category] = eventList;
-    });
-    return newGroup;
-  }, [categories, events]);
-
-  return { events, eventMap, eventCategoryGroup, categories, isLoading, error };
+  return {
+    events: filteredEvents,
+    categories,
+    isLoading: isCategoryLoading || isFilteredEventsLoading,
+    error: categoryError || filteredEventsError,
+  };
 };
 
 export default useEvent;

@@ -14,7 +14,6 @@ const page = () => {
       <SearchBar />
       <FirstHero />
       <UpcomingEvents />
-      <EventList />
       <Footer />
     </>
   );

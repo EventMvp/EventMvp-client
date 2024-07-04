@@ -3,5 +3,6 @@ export const config = {
   endpoints: {
     getAllEvents: "/events",
     getCategoryEvent: "/category",
+    filteredEventByCategory: "/events/filter",
   },
 };

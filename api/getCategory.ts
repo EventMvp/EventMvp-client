@@ -5,13 +5,17 @@ import axiosInstance from "@/utils/axiosInstance";
 
 async function getData() {
   let endpoints = config.endpoints.getCategoryEvent;
+
   try {
     const response = await axiosInstance.get(endpoints);
     return response.data;
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error message", error);
+    throw error;
+  }
 }
 
 export async function getCategory() {
-  const Events = (await getData()) as unknown as category[];
-  return Events;
+  const categories = (await getData()) as unknown as category[];
+  return categories;
 }

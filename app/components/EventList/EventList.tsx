@@ -3,9 +3,8 @@
 import Card from "@/components/Card/Card";
 import useEvent from "@/hooks/useEvents";
 
-const EventList: React.FC = () => {
-  const { events, isLoading, error, categories, eventCategoryGroup } =
-    useEvent();
+const EventList: React.FC<{ filters: any }> = ({ filters }) => {
+  const { events, isLoading, error } = useEvent(filters);
 
   if (isLoading) {
     return (
@@ -32,9 +31,9 @@ const EventList: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 m-4 md:px-8">
-      {events.map((event) => (
-        <Card key={event.id} {...event} />
-      ))}
+      {events.map((event) => {
+        return <Card key={event.id} {...event} />;
+      })}
     </div>
   );
 };
