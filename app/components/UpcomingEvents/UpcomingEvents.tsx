@@ -3,6 +3,7 @@ import useEvent from "@/hooks/useEvents";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import EventList from "../EventList/EventList";
+import useEventFilters from "@/hooks/useEventFilters";
 
 const UpcomingEvents = () => {
   const [filters, setFilters] = useState({
@@ -87,10 +88,6 @@ const UpcomingEvents = () => {
               <li>Item 2</li>
             </ul>
           </div>
-        </div>
-        <div className="px-4 pt-4 md:px-12 md:pt-8 flex items-center justify-between">
-          <h1 className="text-2xl ">Upcoming Events</h1>
-          <p className="pr-4 pt-2">See all</p>
         </div>
       </div>
       <EventList filters={filters} />

@@ -4,5 +4,6 @@ export const config = {
     getAllEvents: "/events",
     getCategoryEvent: "/category",
     filteredEventByCategory: "/events/filter",
+    searchByTitle: "/events/search",
   },
 };

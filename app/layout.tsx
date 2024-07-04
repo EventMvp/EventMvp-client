@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en" data-theme="mytheme" className="bg-info">
       <ReactQueryProvider>
         <body className={inter.className}>{children}</body>
+        <ReactQueryDevtools initialIsOpen={false} />
       </ReactQueryProvider>
     </html>
   );

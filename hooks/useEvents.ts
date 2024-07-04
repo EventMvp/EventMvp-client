@@ -5,6 +5,7 @@ import {
   GET_CATEGORY,
   GET_EVENTS,
   GET_FILTERED_EVENTS,
+  GET_FREE_EVENTS,
 } from "@/constants/queryKey";
 import { Event } from "@/types/events";
 import { useQuery } from "@tanstack/react-query";
@@ -41,11 +42,23 @@ const useEvent = (filters?: Record<string, any>) => {
     enabled: !!filters,
   });
 
+  const {
+    data: freeEvents,
+    isLoading: isLoadingFreeEvents,
+    error: errorFreeEvents,
+  } = useQuery({
+    queryKey: [GET_FREE_EVENTS],
+    queryFn: async () => await getFilteredEvents({ isFree: true, size: 1 }),
+    retry: false,
+  });
+
   return {
     events: filteredEvents,
+    freeEvents,
     categories,
-    isLoading: isCategoryLoading || isFilteredEventsLoading,
-    error: categoryError || filteredEventsError,
+    isLoading:
+      isCategoryLoading || isFilteredEventsLoading || isLoadingFreeEvents,
+    error: categoryError || filteredEventsError || errorFreeEvents,
   };
 };
 
