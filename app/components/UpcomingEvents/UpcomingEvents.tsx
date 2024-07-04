@@ -84,7 +84,7 @@ const UpcomingEvents = () => {
           </ul>
         </div>
       </div>
-      <div className="px-4 pt-4 flex items-center justify-between">
+      <div className="px-4 pt-4 md:px-12 md:pt-8 flex items-center justify-between">
         <h1 className="text-2xl ">Upcoming Events</h1>
         <p className="pr-4 pt-2">See all</p>
       </div>

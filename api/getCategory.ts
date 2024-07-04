@@ -1,20 +1,17 @@
 import { config } from "@/constants/url";
+import { category } from "@/types/category";
 import { Event } from "@/types/events";
 import axiosInstance from "@/utils/axiosInstance";
 
 async function getData() {
-  let endpoints = config.endpoints.getAllEvents;
-
+  let endpoints = config.endpoints.getCategoryEvent;
   try {
     const response = await axiosInstance.get(endpoints);
     return response.data;
-  } catch (error) {
-    console.log("Error fetching data", error);
-    throw error;
-  }
+  } catch (error) {}
 }
 
-export async function getEvents() {
-  const Events = (await getData()) as unknown as Event[];
+export async function getCategory() {
+  const Events = (await getData()) as unknown as category[];
   return Events;
 }

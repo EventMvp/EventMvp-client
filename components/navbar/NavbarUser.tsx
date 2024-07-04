@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const NavbarUser = () => {
@@ -31,7 +32,7 @@ const NavbarUser = () => {
       <div className="cursor-pointer text-xl pl-2">EventHive</div>
       <div className="flex gap-6">
         <p className="text-lg">Events</p>
-        <p className="text-lg">Redeem Points: POINTS</p>
+        {/* <p className="text-sm">Points: POINTS</p> */}
         <div ref={dropdownRef} className="relative">
           <img
             src="https://placehold.co/40x40"
@@ -42,7 +43,9 @@ const NavbarUser = () => {
           {dropdownOpen && (
             <div className="absolute z-50 my-2 right-2 top-10 rounded-lg bg-primary-content">
               <div className="w-40">
-                <a className="block px-4 py-2 hover:bg-gray-100">Profile</a>
+                <Link href="/profile">
+                  <p className="block px-4 py-2 hover:bg-gray-100">Profile</p>
+                </Link>
                 <a className="block px-4 py-2 hover:bg-gray-100">Logout</a>
               </div>
             </div>
