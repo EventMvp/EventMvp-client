@@ -1,7 +1,7 @@
 import { Event } from "@/types/events";
 
 const Card: React.FC<Event> = ({ ...props }) => {
-  const { title, date } = props;
+  const { title, date, description } = props;
 
   return (
     <div className="card bg-base-100 shadow-xl">
@@ -12,15 +12,13 @@ const Card: React.FC<Event> = ({ ...props }) => {
         />
       </figure>
       <div className="card-body p-4">
-        <h2 className="card-title">
-          {title}
-          <div className="badge-sm rounded-badge badge-primary">FREE</div>
-        </h2>
-        <p></p>
+        <h2 className="card-title">{title}</h2>
+        <p className="overflow-hidden text-ellipsis whitespace-nowrap">
+          {description}
+        </p>
         <p>{date}</p>
         <div className="card-actions justify-end">
-          <div className="badge badge-outline">Fashion</div>
-          <div className="badge badge-outline">Products</div>
+          <div className="badge badge-outline bg-primary text-white">FREE</div>
         </div>
       </div>
     </div>
