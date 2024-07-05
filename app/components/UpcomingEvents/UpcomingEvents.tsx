@@ -4,21 +4,19 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import EventList from "../EventList/EventList";
 import useEventFilters from "@/hooks/useEventFilters";
+// import useEventFilters from "@/hooks/useEventFilters";
 
 const UpcomingEvents = () => {
-  const [filters, setFilters] = useState({
-    categoryId: null,
-    date: null,
-    isFree: null,
-    page: 0,
-    size: 5,
-  });
+  // TODO: Remove this, and use the `filter` state from useEventFilter hook
+  const { filters, handleFilterChange } = useEventFilters();
 
+  // use the filter from Hook above to be used by react query
   const { events, categories, isLoading, error } = useEvent(filters);
 
-  const handleFilterChange = (newFilters) => {
-    setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
-  };
+  // TODO: Create interface/type for standarized filter structure
+  // const handleFilterChange = (newFilters: any) => {
+  //   setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
+  // };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

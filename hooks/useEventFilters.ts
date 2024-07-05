@@ -1,66 +1,76 @@
-// import { useRouter } from "next/navigation";
-// import { useEffect, useState } from "react";
+"use client";
 
-// interface Filters {
-//   categoryId: number[];
-//   date: string | null;
-//   isFree: boolean | null;
-//   page: number;
-//   size: number;
-// }
+import { useRouter, useSearchParams } from "next/navigation";
+import { NextRequest } from "next/server";
+import { useEffect, useState } from "react";
 
-// const useEventFilters = () => {
-//   const router = useRouter();
-//   const [filters, setFilters] = useState<Filters>({
-//     categoryId: [],
-//     date: null,
-//     isFree: null,
-//     page: 0,
-//     size: 5,
-//   });
+export interface FiltersEventParams {
+  categoryId: number | null;
+  date: string | null;
+  isFree: boolean | null;
+  page: number;
+  size: number;
+}
 
-//   // Parse URL parameters and set filters state accordingly
-//   useEffect(() => {
-//     const query = new URLSearchParams(router.query as unknown as string);
-//     const categoryId = query.get("categoryId")?.split(",").map(Number) || [];
-//     const date = query.get("date") || null;
-//     const isFree =
-//       query.get("isFree") === "true"
-//         ? true
-//         : query.get("isFree") === "false"
-//         ? false
-//         : null;
+const useEventFilters = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [filters, setFilters] = useState<FiltersEventParams>({
+    categoryId: null,
+    date: null,
+    isFree: null,
+    page: 0,
+    size: 5,
+  });
 
-//     setFilters((prevFilters) => ({
-//       ...prevFilters,
-//       categoryId,
-//       date,
-//       isFree,
-//     }));
-//   }, [router.query]);
+  // TODO:
+  // Check on refresh/reload state, make sure the state above match the filter state on the URL Param
+  useEffect(() => {
+    const query = new URLSearchParams(searchParams.toString());
+    const categoryId = query.get("categoryId");
+    const date = query.get("date") || null;
+    const isFree =
+      query.get("isFree") === "true"
+        ? true
+        : query.get("isFree") === "false"
+        ? false
+        : null;
 
-//   // Update URL with new filters
-//   const handleFilterChange = (newFilter) => {
-//     setFilters((prevFilters) => {
-//       const updatedFilters = { ...prevFilters, ...newFilter };
-//       const queryParams = new URLSearchParams();
+    const parsedCategory: number | null = categoryId
+      ? parseInt(categoryId)
+      : null;
 
-//       Object.keys(updatedFilters).forEach((key) => {
-//         if (updatedFilters[key] !== null && updatedFilters[key] !== undefined) {
-//           if (Array.isArray(updatedFilters[key])) {
-//             queryParams.set(key, updatedFilters[key].join(","));
-//           } else {
-//             queryParams.set(key, updatedFilters[key]);
-//           }
-//         }
-//       });
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      categoryId: parsedCategory,
+      date,
+      isFree,
+    }));
+  }, [searchParams]);
 
-//       router.push(`/events?${queryParams.toString()}`);
-//       return updatedFilters;
-//     });
-//   };
+  // Update URL with new filters
+  const handleFilterChange = (newFilter: Partial<FiltersEventParams>) => {
+    setFilters((prevFilters) => {
+      const updatedFilters = { ...prevFilters, ...newFilter };
+      const queryParams = new URLSearchParams();
 
-//   return { filters, handleFilterChange };
-// };
+      Object.keys(updatedFilters).forEach((key) => {
+        const value = updatedFilters[key as keyof FiltersEventParams];
+        if (value !== null && value !== undefined) {
+          if (Array.isArray(value)) {
+            queryParams.set(key, value.join(","));
+          } else {
+            queryParams.set(key, value.toString());
+          }
+        }
+      });
 
-// export default useEventFilters;
+      router.push(`?${queryParams.toString()}`);
+      return updatedFilters;
+    });
+  };
+
+  return { filters, handleFilterChange };
+};
+
+export default useEventFilters;
