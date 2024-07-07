@@ -1,11 +1,12 @@
 "use client";
 
-import { getFilteredEvents } from "@/api/getFilteredEvents";
 import Card from "@/components/Card/Card";
 import useEvent from "@/hooks/useEvents";
+import { useRouter } from "next/navigation";
 
 const EventList: React.FC<{ filters: any }> = ({ filters }) => {
   const { events, freeEvents, isLoading, error } = useEvent(filters);
+  const router = useRouter();
 
   if (isLoading) {
     return (
@@ -30,6 +31,10 @@ const EventList: React.FC<{ filters: any }> = ({ filters }) => {
       </div>
     );
 
+  const handleCardClick = (eventId: number) => {
+    router.push(`/event/${eventId}`);
+  };
+
   return (
     <>
       <div className="px-4 pt-4 md:px-12 md:pt-8">
@@ -50,7 +55,11 @@ const EventList: React.FC<{ filters: any }> = ({ filters }) => {
             <h1 className="text-2xl px-4">Got your Upcoming Events!!!</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 m-4 md:px-8">
               {events.map((event) => (
-                <Card key={event.id} {...event} />
+                <Card
+                  key={event.id}
+                  {...event}
+                  onClick={() => handleCardClick(event.id)}
+                />
               ))}
             </div>
           </>

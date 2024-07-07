@@ -1,16 +1,9 @@
 "use client";
 
+import { FiltersEventParams } from "@/types/FilterEventParams";
 import { useRouter, useSearchParams } from "next/navigation";
 import { NextRequest } from "next/server";
 import { useEffect, useState } from "react";
-
-export interface FiltersEventParams {
-  categoryId: number | null;
-  date: string | null;
-  isFree: boolean | null;
-  page: number;
-  size: number;
-}
 
 const useEventFilters = () => {
   const router = useRouter();

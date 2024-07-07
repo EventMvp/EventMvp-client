@@ -1,3 +1,5 @@
+import { category } from "./category";
+
 // ticket_type enum
 export enum TicketType {
   VIP = "VIP",
@@ -12,7 +14,7 @@ export interface Event {
   date: string;
   time: string;
   location: string;
-  category?: string;
+  category: category;
   price: number;
   available_seats: number;
   ticket_type: TicketType;

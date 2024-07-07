@@ -1,5 +1,6 @@
 import { getEventsByTitle } from "@/api/getEventByTitle";
 import { GET_SEARCH_EVENTS } from "@/constants/queryKey";
+import { FiltersEventParams } from "@/types/FilterEventParams";
 import { useQuery } from "@tanstack/react-query";
 
 const useSearchEvents = (filters?: Record<string, any>) => {
@@ -9,7 +10,7 @@ const useSearchEvents = (filters?: Record<string, any>) => {
     error,
   } = useQuery({
     queryKey: [GET_SEARCH_EVENTS, filters],
-    queryFn: async () => await getEventsByTitle(filters),
+    queryFn: async () => await getEventsByTitle(filters as FiltersEventParams),
     enabled: !!filters,
   });
 

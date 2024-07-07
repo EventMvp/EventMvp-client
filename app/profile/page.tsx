@@ -1,15 +1,14 @@
 import { ChevronLeft, SquarePen } from "lucide-react";
 import CardEvent from "./components/CardEvent";
 import Link from "next/link";
+import BackButton from "../../components/BackButton";
 
 const ProfilePage = () => {
   return (
     <div className="flex flex-col md:flex-row p-6 gap-4 w-screen">
       <div className="flex flex-col gap-4 md:pr-10 items-center md:items-center md:border-transparent md:border-2 md:border-r-primary-content">
         <h1 className="text-2xl font-semibold text-left w-full inline-flex items-center gap-2">
-          <Link href="/">
-            <ChevronLeft className="text-primary transition-transform duration-300 transform hover:scale-125" />
-          </Link>
+          <BackButton />
           Profile
         </h1>
         <div className="w-[250px] h-[250px]">

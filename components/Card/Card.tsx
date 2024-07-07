@@ -1,10 +1,14 @@
 import { Event } from "@/types/events";
 
-const Card: React.FC<Event> = ({ ...props }) => {
-  const { title, date, description } = props;
+interface CardProps extends Event {
+  onClick?: () => void;
+}
+
+const Card: React.FC<CardProps> = ({ ...props }) => {
+  const { title, date, description, onClick } = props;
 
   return (
-    <div className="card bg-base-100 shadow-xl">
+    <div className="card bg-base-100 shadow-xl" onClick={onClick}>
       <figure>
         <img
           src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"

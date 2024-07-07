@@ -45,7 +45,7 @@ const SearchBar = () => {
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder="Search"
-          className="flex-grow px-2 h-full border-none focus:outline-none"
+          className="flex-grow px-2 h-full border-none rounded-xl bg-transparent focus:outline-none"
         />
       </div>
       {isFocused && (
@@ -61,7 +61,7 @@ const SearchBar = () => {
             </div>
           )}
           {suggestions && suggestions?.length > 0 && (
-            <ul className="absolute left-0 right-0 bg-white border border-gray-300 mt-1 rounded-md shadow-lg z-10">
+            <ul className="absolute left-0 right-0 mx-4 bg-white border border-gray-300 mt-1 rounded-md shadow-lg z-10">
               {suggestions.map((suggestion) => (
                 <li
                   key={suggestion.id}

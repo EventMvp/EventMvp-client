@@ -1,11 +1,15 @@
 "use client";
+import BackButton from "@/components/BackButton";
 import ModalBuyTicket from "../components/ModalBuyTicket";
+import { useParams } from "next/navigation";
+import useEventDetails from "@/hooks/useEventDetails";
 
-interface EventDetailsProps {
-  eventId: string;
-}
+const EventDetails: React.FC = () => {
+  const { eventId } = useParams();
+  console.log("THIS IS EVENTID ===========" + eventId + "=============");
 
-const EventDetails: React.FC<EventDetailsProps> = ({ eventId }) => {
+  const { data: event, isLoading, error } = useEventDetails(eventId as string);
+
   const handleModalOpen = () => {
     const modal = document.getElementById(
       "buy-ticket"
@@ -15,9 +19,15 @@ const EventDetails: React.FC<EventDetailsProps> = ({ eventId }) => {
     }
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
     <div className="flex flex-col p-4 gap-4">
-      <h1 className="text-2xl font-semibold">EVENT TITLE</h1>
+      <div className="flex gap-4">
+        <BackButton />
+        <h1 className="text-2xl font-semibold">{event?.title}</h1>
+      </div>
       <img
         src="https://placehold.co/800x400"
         alt="Event Image"
@@ -30,7 +40,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ eventId }) => {
         </div>
         <div className="mb-2">
           <h3 className="text-xl font-semibold">Date</h3>
-          <p>March 25, 2023</p>
+          <p>{event?.date}</p>
         </div>
         <div className="mb-2">
           <h3 className="text-xl font-semibold">Location</h3>
@@ -38,20 +48,15 @@ const EventDetails: React.FC<EventDetailsProps> = ({ eventId }) => {
         </div>
         <div className="mb-2">
           <h3 className="text-xl font-semibold">Category</h3>
-          <p>Music, Jazz, Metal</p>
+          <p>{event?.category?.name}</p>
         </div>
       </div>
       <div className="flex flex-col gap-2">
         <h1 className="text-xl font-semibold">Description</h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
-          molestiae totam iusto veritatis. Quia repudiandae cumque rem.
-          Voluptates consequatur delectus explicabo fuga sed aperiam quam iste
-          rem velit ratione. Dolorem?
-        </p>
+        <p>{event?.description}</p>
       </div>
       <div className="flex flex-col justify-center gap-2 text-center mt-4">
-        <p className="font-medium text-lg">From PRICE</p>
+        <p className="font-medium text-lg">From {event?.price}</p>
         <button className="btn btn-primary" onClick={handleModalOpen}>
           Buy Ticket
         </button>
