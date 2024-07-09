@@ -48,6 +48,7 @@ const EventList: React.FC<{ filters: any }> = ({ filters }) => {
                     key={event.id}
                     {...event}
                     className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+                    onClick={() => handleCardClick(event.id)}
                   />
                 ))}
               </div>
