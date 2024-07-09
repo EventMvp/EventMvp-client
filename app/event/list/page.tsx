@@ -4,6 +4,7 @@ import useSearchEvents from "@/hooks/useSearchEvents";
 import EventCardRight from "./components/EventCardRight";
 import { useSearchParams } from "next/navigation";
 import { title } from "process";
+import NavbarUser from "@/components/navbar/NavbarUser";
 
 const EventListBySearch = () => {
   const searchParams = useSearchParams();
@@ -17,13 +18,16 @@ const EventListBySearch = () => {
 
   return (
     <>
-      {searchEvents && searchEvents.length > 0 ? (
-        searchEvents.map((event) => (
-          <EventCardRight key={event.id} {...event} />
-        ))
-      ) : (
-        <div>No Events Found</div>
-      )}
+      <NavbarUser />
+      <div className="flex flex-col items-center">
+        {searchEvents && searchEvents.length > 0 ? (
+          searchEvents.map((event) => (
+            <EventCardRight key={event.id} {...event} />
+          ))
+        ) : (
+          <div>No Events Found</div>
+        )}
+      </div>
     </>
   );
 };

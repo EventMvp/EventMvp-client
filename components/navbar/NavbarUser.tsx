@@ -29,7 +29,9 @@ const NavbarUser = () => {
 
   return (
     <nav className="navbar bg-transparent justify-between pt-5">
-      <div className="cursor-pointer text-xl pl-2">EventHive</div>
+      <Link href={"/"}>
+        <p className="btn btn-ghost text-xl pl-2 cursor-pointer">EventHive</p>
+      </Link>
       <div className="flex gap-6">
         <p className="text-lg">Events</p>
         {/* <p className="text-sm">Points: POINTS</p> */}
