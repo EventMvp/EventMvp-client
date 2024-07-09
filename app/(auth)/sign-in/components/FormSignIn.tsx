@@ -1,4 +1,5 @@
 import GenericForm from "@/components/Form/GenericForm";
+import { signIn } from "next-auth/react";
 import * as Yup from "yup";
 
 const FormSignIn = () => {
@@ -12,8 +13,13 @@ const FormSignIn = () => {
     password: Yup.string().required("Password required!!"),
   });
 
-  const handleSubmit = (values: any) => {
-    console.log("Sign in", values);
+  const handleSubmit = async (values: any) => {
+    const result = await signIn("credentials", {
+      username: values.email,
+      password: values.password,
+      redirect: true,
+      callbackUrl: "/",
+    });
   };
 
   const fields = [

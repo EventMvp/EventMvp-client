@@ -42,9 +42,13 @@ const EventList: React.FC<{ filters: any }> = ({ filters }) => {
           <>
             <h1 className="text-2xl px-4">Got your Free Events!!!</h1>
             <div className="overflow-x-auto py-4">
-              <div className="flex md:grid-cols-3 md:gap-4 space-x-4 md:space-x-0">
+              <div className="flex gap-4 justify-start">
                 {freeEvents.map((event) => (
-                  <Card key={event.id} {...event} />
+                  <Card
+                    key={event.id}
+                    {...event}
+                    className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+                  />
                 ))}
               </div>
             </div>

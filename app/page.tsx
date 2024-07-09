@@ -9,8 +9,8 @@ import NavbarUser from "@/components/navbar/NavbarUser";
 const page = () => {
   return (
     <>
-      {/* <Navbar /> */}
-      <NavbarUser />
+      <Navbar />
+      {/* <NavbarUser /> */}
       <SearchBar />
       <FirstHero />
       <UpcomingEvents />

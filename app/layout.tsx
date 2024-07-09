@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import AuthProvider from "./AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="mytheme" className="bg-info">
       <ReactQueryProvider>
-        <body className={inter.className}>{children}</body>
+        <AuthProvider>
+          <body className={inter.className}>{children}</body>
+        </AuthProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </ReactQueryProvider>
     </html>

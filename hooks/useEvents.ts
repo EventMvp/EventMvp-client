@@ -48,7 +48,7 @@ const useEvent = (filters?: Record<string, any>) => {
     error: errorFreeEvents,
   } = useQuery({
     queryKey: [GET_FREE_EVENTS],
-    queryFn: async () => await getFilteredEvents({ isFree: true, size: 1 }),
+    queryFn: async () => await getFilteredEvents({ isFree: true }),
     retry: false,
   });
 
