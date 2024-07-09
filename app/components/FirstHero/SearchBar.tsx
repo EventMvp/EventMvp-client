@@ -3,10 +3,13 @@
 import useSearchEvents from "@/hooks/useSearchEvents";
 import { Event } from "@/types/events";
 import { Search } from "lucide-react";
-import { ChangeEvent, FocusEventHandler, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, FocusEventHandler, FormEvent, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 const SearchBar = () => {
+  const router = useRouter();
+
   const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebounce(query, 500);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -23,6 +26,7 @@ const SearchBar = () => {
 
   const handleSuggestionClick = (suggestions: Event) => {
     setQuery(suggestions.title);
+    router.push(`/event/${suggestions.id}`);
   };
 
   const handleFocus = (): void => {
@@ -34,9 +38,16 @@ const SearchBar = () => {
     setTimeout(() => setIsFocused(false), 100);
   };
 
+  const handleSubmit = (e: FormEvent): void => {
+    e.preventDefault();
+    router.push(`/event/list?title=${query}`);
+  };
+
   return (
     <div className="relative">
-      <div className="rounded-badge shadow flex border-grey-opacity border-2 mx-2 h-14 items-center">
+      <form
+        onSubmit={handleSubmit}
+        className="rounded-badge shadow flex border-grey-opacity border-2 mx-2 h-14 items-center">
         <Search width={24} height={24} className="m-2" />
         <input
           type="text"
@@ -47,7 +58,7 @@ const SearchBar = () => {
           placeholder="Search"
           className="flex-grow px-2 h-full border-none rounded-xl bg-transparent focus:outline-none"
         />
-      </div>
+      </form>
       {isFocused && (
         <div>
           {isLoading && (
