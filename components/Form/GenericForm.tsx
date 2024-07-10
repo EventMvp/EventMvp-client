@@ -102,7 +102,7 @@ const GenericForm: React.FC<GenericFormProps> = ({
               <div key={field.id} className="space-y-2">
                 <label
                   htmlFor={field.id}
-                  className="block text-sm font-medium text-gray-700">
+                  className="block text-sm font-medium text-gray-700 text-left">
                   {field.label}
                 </label>
                 {field.type === "radio" && field.options ? (
