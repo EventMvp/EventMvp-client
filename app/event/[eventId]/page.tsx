@@ -5,7 +5,11 @@ import { useParams } from "next/navigation";
 import useEventDetails from "@/hooks/useEventDetails";
 
 const EventDetails: React.FC = () => {
-  const { eventId } = useParams();
+  const { eventId } = useParams<{ eventId: string }>() || {};
+
+  if (!eventId) {
+    throw new Error("ID is needed");
+  }
   console.log("THIS IS EVENTID ===========" + eventId + "=============");
 
   const { data: event, isLoading, error } = useEventDetails(eventId as string);
@@ -44,7 +48,7 @@ const EventDetails: React.FC = () => {
         </div>
         <div className="mb-2">
           <h3 className="text-xl font-semibold">Location</h3>
-          <p>123 Event Street, City, Country</p>
+          <p>{event?.location}</p>
         </div>
         <div className="mb-2">
           <h3 className="text-xl font-semibold">Category</h3>
