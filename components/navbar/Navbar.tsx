@@ -23,7 +23,9 @@ const Navbar = () => {
             <button className="btn btn-ghost" onClick={() => signIn()}>
               Log in
             </button>
-            <button className="btn btn-primary no-underline">Sign Up</button>
+            <Link href={"/sign-up"}>
+              <button className="btn btn-primary no-underline">Sign Up</button>
+            </Link>
           </div>
         </div>
       )}

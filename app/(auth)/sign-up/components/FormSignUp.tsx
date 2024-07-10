@@ -1,30 +1,67 @@
+import { addUser } from "@/api/createUser";
 import GenericForm from "@/components/Form/GenericForm";
+import { Register } from "@/types/register";
 import * as Yup from "yup";
 
 const FormSignUp = () => {
   const initialValues = {
+    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    passwordMatch: "",
+    role: "",
+    referralCode: "",
   };
 
   const validationSchema = Yup.object({
+    name: Yup.string().min(5, "name must be at least 5 characters"),
     email: Yup.string().email("Invalid email address").required("Required!!"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .matches(/(?=.*[0-9])/, "Password must contain at least one number")
-      .matches(/(?=.*[!@#$%^&*_])/, "Password must contain at least one symbol")
+      .matches(
+        /(?=.*[!@#$%^&*_/])/,
+        "Password must contain at least one symbol"
+      )
       .required("Required!!"),
-    confirmPassword: Yup.string()
+    passwordMatch: Yup.string()
       .oneOf([Yup.ref("password"), undefined], "Passwords must match")
       .required("Required!!"),
+    role: Yup.string()
+      .oneOf(["CUSTOMER", "ORGANIZER"], "Role must be CUSTOMER or ORGANIZER")
+      .required("Required!!"),
+    referralCode: Yup.string()
+      .matches(
+        /^[A-Z0-9]{8}$/,
+        "Referral code must be 8 characters long and contain only uppercase letters and numbers"
+      )
+      .nullable()
+      .notRequired(),
   });
 
-  const handleSubmit = (values: any) => {
-    console.log("Sign up", values);
+  const handleSubmit = async (values: Register) => {
+    try {
+      console.log("Submitting values:", values);
+      const newUser = await addUser({
+        ...values,
+        name: "admin-noref123",
+      });
+      console.log("New user added:", newUser);
+      // Handle successful user addition (e.g., show success message, redirect)
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+      // Handle error (e.g., show error message to user)
+    }
   };
 
   const fields = [
+    {
+      id: "name",
+      label: "name",
+      name: "name",
+      type: "text",
+      placeholder: "Name",
+    },
     {
       id: "email",
       label: "Email",
@@ -40,11 +77,28 @@ const FormSignUp = () => {
       placeholder: "Enter your password",
     },
     {
-      id: "confirmPassword",
+      id: "passwordMatch",
       label: "Confirm Password",
-      name: "confirmPassword",
+      name: "passwordMatch",
       type: "password",
       placeholder: "Enter your password",
+    },
+    {
+      id: "role",
+      label: "Role",
+      name: "role",
+      type: "radio",
+      options: [
+        { label: "CUSTOMER", value: "CUSTOMER" },
+        { label: "ORGANIZER", value: "ORGANIZER" },
+      ],
+    },
+    {
+      id: "referralCode",
+      label: "Referral Code",
+      name: "referralCode",
+      type: "text",
+      placeholder: "referral code (optional)",
     },
   ];
 

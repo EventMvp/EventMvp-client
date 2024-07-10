@@ -8,5 +8,6 @@ export const config = {
     searchByTitle: "/events/search",
     getEventById: "/events/",
     getProfile: "/users/profile",
+    createUser: "/users/register",
   },
 };
