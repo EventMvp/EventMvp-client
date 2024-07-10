@@ -1,4 +1,6 @@
 "use client";
+import { deleteCookie } from "@/utils/deleteCookies";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -27,6 +29,12 @@ const NavbarUser = () => {
     };
   }, []);
 
+  const handleLogout = () => {
+    deleteCookie("sid");
+
+    signOut({ callbackUrl: "/" });
+  };
+
   return (
     <nav className="navbar bg-transparent justify-between pt-5">
       <Link href={"/"}>
@@ -48,7 +56,11 @@ const NavbarUser = () => {
                 <Link href="/profile">
                   <p className="block px-4 py-2 hover:bg-gray-100">Profile</p>
                 </Link>
-                <a className="block px-4 py-2 hover:bg-gray-100">Logout</a>
+                <a
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={handleLogout}>
+                  Logout
+                </a>
               </div>
             </div>
           )}

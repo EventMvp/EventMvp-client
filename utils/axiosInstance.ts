@@ -1,10 +1,12 @@
 // utils/axiosInstance.ts
 
+import { config } from "@/constants/url";
 import axios from "axios";
 
 // Create an instance of axios with custom config if needed
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_PRODUCTION_URL, // Your API base URL from environment variable
+  withCredentials: true,
+  baseURL: config.BASE_URL, // Your API base URL from environment variable
   timeout: 5000, // Timeout after 10 seconds
   headers: {
     "Content-Type": "application/json",

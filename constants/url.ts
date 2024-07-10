@@ -1,10 +1,12 @@
 export const config = {
-  BASE_URL: process.env.NEXT_PUBLIC_PRODUCTIONS_URL,
+  PROD_URL: process.env.NEXT_PUBLIC_PRODUCTIONS_URL,
+  BASE_URL: process.env.NEXT_PUBLIC_DEV_URL,
   endpoints: {
     getAllEvents: "/events",
     getCategoryEvent: "/category",
     filteredEventByCategory: "/events/filter",
     searchByTitle: "/events/search",
     getEventById: "/events/",
+    getProfile: "/users/profile",
   },
 };

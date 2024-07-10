@@ -1,9 +1,17 @@
+"use client";
+
 import { ChevronLeft, SquarePen } from "lucide-react";
 import CardEvent from "./components/CardEvent";
 import Link from "next/link";
 import BackButton from "../../components/BackButton";
+import useProfileDetails from "@/hooks/useProfileDetails";
 
 const ProfilePage = () => {
+  const { data, isLoading, error } = useProfileDetails();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error {error.message}</div>;
+
   return (
     <div className="flex flex-col md:flex-row p-6 gap-4 w-screen">
       <div className="flex flex-col gap-4 md:pr-10 items-center md:items-center md:border-transparent md:border-2 md:border-r-primary-content">
@@ -20,13 +28,14 @@ const ProfilePage = () => {
         </div>
         <div className="flex flex-col gap-2 pt-4 text-center md:justify-start">
           <p className="relative">
-            Kyraa
+            {data?.username}
             <span className="absolute cursor-pointer transition-transform duration-300 transform hover:scale-125">
               <SquarePen width={16} height={16} />
             </span>
           </p>
-          <p>Fiqra@gmail.com</p>
-          <p className="font-semibold">Your Points: POINTS</p>
+          <p>{data?.email}</p>
+          <p>Your referral code: {data?.referralCode}</p>
+          <p className="font-semibold">Your Points: {data?.points}</p>
         </div>
       </div>
       <div className="flex flex-col p-4 gap-4 w-full">

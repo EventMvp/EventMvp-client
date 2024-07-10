@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { cookies } from "next/headers";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -18,6 +19,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: credentials?.username,
             password: credentials?.password,
           }),
+          credentials: "include",
         });
 
         if (!res.ok) return null;
@@ -28,11 +30,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!user) {
           throw new Error("User not found.");
         }
+        const useCookies = cookies();
+        useCookies.set("sid", user.token);
+        // decode jwt
 
         return user;
       },
     }),
   ],
+  pages: {
+    signIn: "/sign-in",
+  },
 });
 
 // import NextAuth from "next-auth";

@@ -19,7 +19,7 @@ const useEventFilters = () => {
   // TODO:
   // Check on refresh/reload state, make sure the state above match the filter state on the URL Param
   useEffect(() => {
-    const query = new URLSearchParams(searchParams.toString());
+    const query = new URLSearchParams(searchParams?.toString());
     const categoryId = query.get("categoryId");
     const date = query.get("date") || null;
     const isFree =
