@@ -1,6 +1,7 @@
 export interface FiltersEventParams {
   categoryId: number | null;
-  date: string | null;
+  startDate: string | null;
+  endDate: string | null;
   isFree: boolean | null;
   page: number;
   size: number;

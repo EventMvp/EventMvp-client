@@ -10,7 +10,8 @@ const useEventFilters = () => {
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<FiltersEventParams>({
     categoryId: null,
-    date: null,
+    startDate: null,
+    endDate: null,
     isFree: null,
     page: 0,
     size: 5,
@@ -21,7 +22,8 @@ const useEventFilters = () => {
   useEffect(() => {
     const query = new URLSearchParams(searchParams?.toString());
     const categoryId = query.get("categoryId");
-    const date = query.get("date") || null;
+    const startDate = query.get("startDate") || null;
+    const endDate = query.get("endDate") || null;
     const isFree =
       query.get("isFree") === "true"
         ? true
@@ -36,7 +38,8 @@ const useEventFilters = () => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       categoryId: parsedCategory,
-      date,
+      startDate,
+      endDate,
       isFree,
     }));
   }, [searchParams]);
