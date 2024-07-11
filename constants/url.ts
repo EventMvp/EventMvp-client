@@ -9,5 +9,6 @@ export const config = {
     getEventById: "/events/",
     getProfile: "/users/profile",
     createUser: "/users/register",
+    login: "/auth/login",
   },
 };

@@ -1,16 +1,27 @@
 "use client";
 
-import { ChevronLeft, SquarePen } from "lucide-react";
+import { Check, ChevronLeft, Copy, SquarePen } from "lucide-react";
 import CardEvent from "./components/CardEvent";
 import Link from "next/link";
 import BackButton from "../../components/BackButton";
 import useProfileDetails from "@/hooks/useProfileDetails";
+import { useState } from "react";
 
 const ProfilePage = () => {
   const { data, isLoading, error } = useProfileDetails();
+  const [copied, setCopied] = useState(false);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error {error.message}</div>;
+
+  const copyToClipboard = () => {
+    if (data?.referralCode) {
+      navigator.clipboard.writeText(data.referralCode).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500); // Reset copied state after 2 seconds
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row p-6 gap-4 w-screen">
@@ -27,14 +38,20 @@ const ProfilePage = () => {
           />
         </div>
         <div className="flex flex-col gap-2 pt-4 text-center md:justify-start">
-          <p className="relative">
-            {data?.username}
-            <span className="absolute cursor-pointer transition-transform duration-300 transform hover:scale-125">
-              <SquarePen width={16} height={16} />
-            </span>
-          </p>
+          <p className="relative">{data?.username}</p>
           <p>{data?.email}</p>
-          <p>Your referral code: {data?.referralCode}</p>
+          <p>
+            Your referral code: {data?.referralCode}
+            <button
+              onClick={copyToClipboard}
+              className="cursor-pointer transition-transform duration-300 transform hover:scale-125">
+              {copied ? (
+                <Check width={16} height={16} />
+              ) : (
+                <Copy width={16} height={16} />
+              )}
+            </button>
+          </p>
           <p className="font-semibold">Your Points: {data?.points}</p>
         </div>
       </div>

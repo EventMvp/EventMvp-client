@@ -47,20 +47,22 @@ const NavbarUser = () => {
           <img
             src="https://placehold.co/40x40"
             alt="photoprofile"
-            className="rounded-full"
+            className="rounded-full cursor-pointer"
             onClick={toogleDropdown}
           />
           {dropdownOpen && (
             <div className="absolute z-50 my-2 right-2 top-10 rounded-lg bg-primary-content">
               <div className="w-40">
                 <Link href="/profile">
-                  <p className="block px-4 py-2 hover:bg-gray-100">Profile</p>
+                  <p className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                    Profile
+                  </p>
                 </Link>
-                <a
-                  className="block px-4 py-2 hover:bg-gray-100"
+                <p
+                  className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   onClick={handleLogout}>
                   Logout
-                </a>
+                </p>
               </div>
             </div>
           )}
