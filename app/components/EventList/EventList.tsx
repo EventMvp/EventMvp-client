@@ -2,9 +2,10 @@
 
 import Card from "@/components/Card/Card";
 import useEvent from "@/hooks/useEvents";
+import { FiltersEventParams } from "@/types/FilterEventParams";
 import { useRouter } from "next/navigation";
 
-const EventList: React.FC<{ filters: any }> = ({ filters }) => {
+const EventList: React.FC<{ filters: FiltersEventParams }> = ({ filters }) => {
   const { events, freeEvents, isLoading, error } = useEvent(filters);
   const router = useRouter();
 
@@ -35,10 +36,22 @@ const EventList: React.FC<{ filters: any }> = ({ filters }) => {
     router.push(`/event/${eventId}`);
   };
 
+  // Create a new object with only the relevant filters (excluding 'page' and 'size')
+  const relevantFilters: string[] = [];
+  for (const key in filters) {
+    if (key !== "page" && key !== "size" && filters[key] !== null) {
+      relevantFilters.push(key);
+    }
+  }
+
+  // Check if any relevant filter is applied
+  const isFilterApplied = relevantFilters.length > 0;
+  console.log(relevantFilters, isFilterApplied);
+
   return (
     <>
       <div className="px-4 pt-4 md:px-12 md:pt-8">
-        {freeEvents && freeEvents?.length > 0 && (
+        {!isFilterApplied && freeEvents && freeEvents?.length > 0 && (
           <>
             <h1 className="text-2xl px-4">Got your Free Events!!!</h1>
             <div className="overflow-x-auto py-4">

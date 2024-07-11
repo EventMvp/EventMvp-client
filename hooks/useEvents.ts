@@ -8,20 +8,10 @@ import {
   GET_FREE_EVENTS,
 } from "@/constants/queryKey";
 import { Event } from "@/types/events";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 const useEvent = (filters?: Record<string, any>) => {
-  // const {
-  //   data: events,
-  //   isLoading: isLoadingEvents,
-  //   error: errorEvents,
-  // } = useQuery({
-  //   queryKey: [GET_EVENTS],
-  //   queryFn: async () => await getEvents(),
-  //   retry: false,
-  // });
-
   const {
     data: categories,
     isLoading: isCategoryLoading,
@@ -36,10 +26,16 @@ const useEvent = (filters?: Record<string, any>) => {
     data: filteredEvents,
     isLoading: isFilteredEventsLoading,
     error: filteredEventsError,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: [GET_FILTERED_EVENTS, filters],
-    queryFn: async () => await getFilteredEvents(filters),
-    enabled: !!filters,
+    queryFn: async ({ pageParam = 0 }) =>
+      await getFilteredEvents({ ...filters, page: pageParam }),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === filters?.size ? allPages.length : undefined;
+    },
   });
 
   const {
@@ -53,12 +49,15 @@ const useEvent = (filters?: Record<string, any>) => {
   });
 
   return {
-    events: filteredEvents,
+    events: filteredEvents?.pages.flatMap((page) => page) || [],
     freeEvents,
     categories,
     isLoading:
       isCategoryLoading || isFilteredEventsLoading || isLoadingFreeEvents,
     error: categoryError || filteredEventsError || errorFreeEvents,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   };
 };
 

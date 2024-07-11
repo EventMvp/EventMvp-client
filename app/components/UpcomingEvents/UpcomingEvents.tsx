@@ -44,8 +44,6 @@ const UpcomingEvents = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  console.log(dateRange);
-
   return (
     <>
       <div className="flex-col gap-2 py-4 text-black">
