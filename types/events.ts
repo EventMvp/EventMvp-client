@@ -22,3 +22,10 @@ export interface Event {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface ResponseGetEvent {
+  totalPages: number;
+  currentPage: number;
+  totalElements: number;
+  content: Event[];
+}

@@ -1,5 +1,5 @@
 import { config } from "@/constants/url";
-import { Event } from "@/types/events";
+import { Event, ResponseGetEvent } from "@/types/events";
 import { getData } from "@/utils/getData";
 
 export async function getFilteredEvents(filters?: Record<string, any>) {
@@ -8,6 +8,6 @@ export async function getFilteredEvents(filters?: Record<string, any>) {
   const filteredEvents = (await getData(
     endpoints,
     filters
-  )) as unknown as Event[];
+  )) as unknown as ResponseGetEvent;
   return filteredEvents;
 }

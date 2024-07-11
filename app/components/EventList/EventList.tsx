@@ -6,7 +6,16 @@ import { FiltersEventParams } from "@/types/FilterEventParams";
 import { useRouter } from "next/navigation";
 
 const EventList: React.FC<{ filters: FiltersEventParams }> = ({ filters }) => {
-  const { events, freeEvents, isLoading, error } = useEvent(filters);
+  const {
+    events,
+    freeEvents,
+    isLoading,
+    error,
+    totalEvents,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useEvent(filters);
   const router = useRouter();
 
   if (isLoading) {
@@ -82,6 +91,19 @@ const EventList: React.FC<{ filters: FiltersEventParams }> = ({ filters }) => {
             </div>
           </>
         )}
+      </div>
+      {hasNextPage && (
+        <div className="flex justify-center mt-4">
+          <button
+            className="btn btn-primary"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}>
+            {isFetchingNextPage ? "Loading more..." : "View More"}
+          </button>
+        </div>
+      )}
+      <div className="text-center mt-4">
+        Showing {events.length} of {totalEvents} events
       </div>
     </>
   );

@@ -39,6 +39,7 @@ const UpcomingEvents = () => {
         endDate: null,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange]);
 
   if (isLoading) return <div>Loading...</div>;

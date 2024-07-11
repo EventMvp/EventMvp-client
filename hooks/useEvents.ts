@@ -31,11 +31,23 @@ const useEvent = (filters?: Record<string, any>) => {
     isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: [GET_FILTERED_EVENTS, filters],
-    queryFn: async ({ pageParam = 0 }) =>
-      await getFilteredEvents({ ...filters, page: pageParam }),
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === filters?.size ? allPages.length : undefined;
+    queryFn: async ({ pageParam }) => {
+      const response = await getFilteredEvents({ ...filters, page: pageParam });
+      return {
+        events: response.content,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages,
+        totalElements: response.totalElements,
+      };
     },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.currentPage < lastPage.totalPages - 1) {
+        return lastPage.currentPage + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 0,
+    enabled: !!filters,
   });
 
   const {
@@ -44,12 +56,16 @@ const useEvent = (filters?: Record<string, any>) => {
     error: errorFreeEvents,
   } = useQuery({
     queryKey: [GET_FREE_EVENTS],
-    queryFn: async () => await getFilteredEvents({ isFree: true }),
+    queryFn: async () => {
+      const response = await getFilteredEvents({ isFree: true });
+      return response.content;
+    },
     retry: false,
   });
 
   return {
-    events: filteredEvents?.pages.flatMap((page) => page) || [],
+    events: filteredEvents?.pages.flatMap((page) => page.events) || [],
+    totalEvents: filteredEvents?.pages[0]?.totalElements || 0,
     freeEvents,
     categories,
     isLoading:
