@@ -54,6 +54,7 @@ const ProfilePage = () => {
           </p>
           <p className="font-semibold">Your Points: {data?.points}</p>
         </div>
+        <div className="btn btn-primary text-white">Create your Event</div>
       </div>
       <div className="flex flex-col p-4 gap-4 w-full">
         <div className="">

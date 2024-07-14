@@ -24,7 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        username: { label: "Email", type: "text", placeholder: "username" },
+        username: { label: "Email", type: "text", placeholder: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -83,5 +83,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       };
       return session;
     },
+  },
+  session: {
+    maxAge: 3600,
   },
 });

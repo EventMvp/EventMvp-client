@@ -10,5 +10,9 @@ export const config = {
     getProfile: "/users/profile",
     createUser: "/users/register",
     login: "/auth/login",
+    uploadImage: "/file/upload",
+    addEvent: "/events/add-event",
+    buyEvent: "/transactions",
+    getEventTicketByEventId: "/ticket/event/",
   },
 };

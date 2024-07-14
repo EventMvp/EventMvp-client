@@ -5,3 +5,4 @@ export const GET_FREE_EVENTS = "get-free-events";
 export const GET_SEARCH_EVENTS = "get-search-events";
 export const GET_EVENT_BY_ID = "get-event-id";
 export const GET_PROFILE = "get-profile";
+export const GET_EVENT_TICKET = "get-event-ticket";
