@@ -1,7 +1,7 @@
 "use client";
 
-import { createEvent } from "@/api/createEvent";
-import { uploadImage } from "@/api/uploadImage";
+import { createEvent } from "@/api/events/createEvent";
+import { uploadImage } from "@/api/file/uploadImage";
 import { config } from "@/constants/url";
 import useEvent from "@/hooks/useEvents";
 import {

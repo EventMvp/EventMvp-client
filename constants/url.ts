@@ -14,5 +14,6 @@ export const config = {
     addEvent: "/events/add-event",
     buyEvent: "/transactions",
     getEventTicketByEventId: "/ticket/event/",
+    voucher: "/vouchers",
   },
 };

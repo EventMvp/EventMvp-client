@@ -1,4 +1,4 @@
-import { getEventsByTitle } from "@/api/getEventByTitle";
+import { getEventsByTitle } from "@/api/events/getEventByTitle";
 import { GET_SEARCH_EVENTS } from "@/constants/queryKey";
 import { FiltersEventParams } from "@/types/FilterEventParams";
 import { useQuery } from "@tanstack/react-query";

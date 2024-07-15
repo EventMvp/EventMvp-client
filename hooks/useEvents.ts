@@ -1,6 +1,6 @@
-import { getCategory } from "@/api/getCategory";
-import { getFilteredEvents } from "@/api/getFilteredEvents";
-import { getEvents } from "@/api/getevents";
+import { getCategory } from "@/api/category/getCategory";
+import { getFilteredEvents } from "@/api/events/getFilteredEvents";
+import { getEvents } from "@/api/events/getevents";
 import {
   GET_CATEGORY,
   GET_EVENTS,

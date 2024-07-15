@@ -1,12 +1,13 @@
 import { CalendarDays, MapPinned } from "lucide-react";
+import FormBuyTicket from "../../components/FormBuyTicket";
 
 const BuyTicket = () => {
   return (
     <div className="flex p-8 gap-8">
-      <div className="flex flex-col gap-8 basis-4/5">
-        <div className="w-full h-full">
+      <div className="flex flex-col gap-8 basis-2/3">
+        <div className="w-full h-[400px]">
           <img
-            src="https://placehold.co/700x300"
+            src="https://placehold.co/500x400"
             alt=""
             className="object-cover w-full h-full"
           />
@@ -24,8 +25,12 @@ const BuyTicket = () => {
             saepe.
           </p>
         </div>
+        <div className="flex flex-col gap-4">
+          <h3 className="font-semibold text-3xl">Ticket Information</h3>
+          <FormBuyTicket />
+        </div>
       </div>
-      <div className="basis-1/5 flex flex-col gap-4">
+      <div className="basis-1/3 flex flex-col gap-4">
         <div className="bg-slate-100 p-4 shadow-lg rounded-lg flex flex-col gap-4">
           <div className="flex flex-col gap-0">
             <p className="font-medium text-lg">TITLE EVENT</p>

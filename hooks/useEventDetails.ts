@@ -1,6 +1,6 @@
 "use client";
 
-import { getEventById } from "@/api/getEventById";
+import { getEventById } from "@/api/events/getEventById";
 import { GET_EVENT_BY_ID } from "@/constants/queryKey";
 import { useQuery } from "@tanstack/react-query";
 
