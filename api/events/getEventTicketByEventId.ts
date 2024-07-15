@@ -1,10 +1,12 @@
 import { config } from "@/constants/url";
-import { EventTicket } from "@/types/eventTicket";
+import { EventTicket, EventTicketItem } from "@/types/eventTicket";
 import { getData } from "@/utils/getData";
 
 export async function getEventTicketByEventId(eventId: string) {
   let endpoints = config.endpoints.getEventTicketByEventId + eventId;
 
-  const ticketTypeList = (await getData(endpoints)) as unknown as EventTicket;
+  const ticketTypeList = (await getData(
+    endpoints
+  )) as unknown as EventTicketItem[];
   return ticketTypeList;
 }
