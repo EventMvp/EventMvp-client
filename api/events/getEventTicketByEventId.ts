@@ -1,5 +1,5 @@
 import { config } from "@/constants/url";
-import { EventTicket, EventTicketItem } from "@/types/eventTicket";
+import { EventTicketItem } from "@/types/eventTicket";
 import { getData } from "@/utils/getData";
 
 export async function getEventTicketByEventId(eventId: string) {

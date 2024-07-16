@@ -15,12 +15,10 @@ export interface Event {
   time: string;
   location: string;
   category: category;
+  organizer: string;
   price: number;
   available_seats: number;
   ticket_type: TicketType;
-  organizer_id: number;
-  created_at: Date;
-  updated_at: Date;
 }
 
 export interface ResponseGetEvent {

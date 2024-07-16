@@ -29,8 +29,8 @@ const NavbarUser = () => {
     };
   }, []);
 
-  const handleLogout = () => {
-    deleteCookie("sid");
+  const handleLogout = (name: string) => {
+    deleteCookie(name);
 
     signOut({ callbackUrl: "/" });
   };
@@ -60,7 +60,7 @@ const NavbarUser = () => {
                 </Link>
                 <p
                   className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={handleLogout}>
+                  onClick={() => handleLogout("sid")}>
                   Logout
                 </p>
               </div>
