@@ -6,7 +6,6 @@ import EventList from "../EventList/EventList";
 import useEventFilters from "@/hooks/useEventFilters";
 import DatePicker from "react-datepicker";
 import { format, parse } from "date-fns";
-// import useEventFilters from "@/hooks/useEventFilters";
 
 const UpcomingEvents = () => {
   const { filters, handleFilterChange } = useEventFilters();
@@ -47,7 +46,7 @@ const UpcomingEvents = () => {
 
   return (
     <>
-      <div className="flex-col gap-2 py-4 text-black">
+      <div className="flex-col gap-2 py-4 text-black mx-5">
         <div className="flex gap-2 justify-evenly items-center">
           <div className="dropdown">
             <div
@@ -113,7 +112,9 @@ const UpcomingEvents = () => {
             }}
             isClearable={true}
             placeholderText="Date"
-            className="w-full px-4 py-2 border rounded-lg"
+            calendarClassName="bg-white border border-gray-200 rounded-lg shadow-lg"
+            dayClassName={() => "text-gray-700 hover:bg-gray-100 rounded-md"}
+            className="w-full p-3 bg-grey-opacity border rounded-lg" //"btn-md items-center p-4 flex rounded-lg gap-2 bg-grey-opacity">
           />
         </div>
       </div>
