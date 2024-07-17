@@ -52,7 +52,7 @@ const FormCompleteProfile = () => {
       validationSchema={validationSchema}
       fields={fields}
       onSubmit={handleSubmit}
-      formTitle="Sign in to EventHive"
+      fieldClass=""
     />
   );
 };
