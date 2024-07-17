@@ -16,7 +16,7 @@ interface ModalProps extends Event {
   voucher?: Voucher;
   eventTicket: EventTicketItem[];
   userPoints: number;
-  isFreeEvent: boolean;
+  isFreeEvent: boolean | null;
 }
 
 const ModalBuyTicket: React.FC<ModalProps> = (props) => {

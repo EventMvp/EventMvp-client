@@ -299,7 +299,7 @@ const FormBuyTicket = () => {
           idModal="buy-ticket"
           eventTicket={eventTicket as EventTicketItem[]}
           userPoints={profile?.points || 0}
-          isFreeEvent={isFreeEvent}
+          isFreeEvent={isFreeEvent || null}
           {...(eventDetails as Event)}
         />
       ) : null}
