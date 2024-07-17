@@ -23,7 +23,7 @@ export default function RootLayout({
         <AuthProvider>
           <body className={inter.className}>{children}</body>
         </AuthProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </ReactQueryProvider>
     </html>
   );

@@ -1,5 +1,5 @@
 import { config } from "@/constants/url";
-import { TransactionData } from "@/types/transactionData";
+import { TransactionData, TransactionFreeData } from "@/types/transactionData";
 import axiosInstance from "@/utils/axiosInstance";
 
 class TransactionAPI {
@@ -9,9 +9,21 @@ class TransactionAPI {
     this.baseEndpoint = config.endpoints.transaction;
   }
 
-  async createTransactions(body: TransactionData) {
+  async createTransactions(body: TransactionData | null) {
     try {
       const response = await axiosInstance.post(this.baseEndpoint, body);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating transaction", error);
+      throw error;
+    }
+  }
+  async createFreeTransactions(body: TransactionFreeData | null) {
+    try {
+      const response = await axiosInstance.post(
+        this.baseEndpoint + "/free",
+        body
+      );
       return response.data;
     } catch (error) {
       console.error("Error creating transaction", error);

@@ -19,7 +19,7 @@ import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import ModalBuyTicket from "./ModalBuyTicket";
 import useEventDetails from "@/hooks/useEventDetails";
-import { TransactionData } from "@/types/transactionData";
+import { TransactionData, TransactionFreeData } from "@/types/transactionData";
 
 // Define a type for the quantities object
 type QuantitiesType = {
@@ -56,6 +56,8 @@ const FormBuyTicket = () => {
   const [buyTicketData, setBuyTicketData] = useState<TransactionData | null>(
     null
   );
+  const [buyFreeTicketData, setBuyFreeTicketData] =
+    useState<TransactionFreeData | null>(null);
   const [ticketCount, setTicketCount] = useState<{ [key: string]: number }>({});
   const [isTicketDropdown, setIsTicketDropdown] = useState<boolean>(false);
   const [isCheckBox, setIsCheckBox] = useState<boolean>(false);
@@ -115,6 +117,14 @@ const FormBuyTicket = () => {
       selectedVoucherId: null as unknown as number | null,
     },
     onSubmit: (values) => {
+      if (isFreeEvent) {
+        const freeEventData: TransactionFreeData = {
+          userId: Number(userId),
+          eventId: Number(eventId),
+          eventTicketId: eventTicket[0].id,
+        };
+        setBuyFreeTicketData(freeEventData);
+      }
       const items = createTransactionItems(
         values.quantities,
         eventId as string
@@ -156,6 +166,11 @@ const FormBuyTicket = () => {
     <div className="">Error</div>;
   }
 
+  const isFreeEvent =
+    eventTicket && eventTicket.every((ticket) => ticket.price === 0);
+
+  console.log("IS FREE EVENT>>>>>", isFreeEvent);
+
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
@@ -169,103 +184,122 @@ const FormBuyTicket = () => {
                 eventTicket.map((ticket: EventTicketItem, index: number) => (
                   <div key={index} className="flex justify-between">
                     <p className="font-bold">{ticket.ticketType}</p>
-                    <div className="flex gap-6">
-                      <p>{formatToIDR(ticket.price)}</p>
-                      <div className="flex gap-4">
-                        <CounterTicket
-                          value={formik.values.quantities[ticket.id] || 0}
-                          onDecrement={() => handleDecrement(ticket.id)}
-                          onIncrement={() => handleIncrement(ticket.id)}
-                          min={0}
-                          max={ticket.availableSeats}
-                        />
+                    {!isFreeEvent ? (
+                      <div className="flex gap-6">
+                        <p>{formatToIDR(ticket.price)}</p>
+                        <div className="flex gap-4">
+                          <CounterTicket
+                            value={formik.values.quantities[ticket.id] || 0}
+                            onDecrement={() => handleDecrement(ticket.id)}
+                            onIncrement={() => handleIncrement(ticket.id)}
+                            min={0}
+                            max={ticket.availableSeats}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="flex gap-6">
+                        <p>FREE</p>
+                      </div>
+                    )}
                   </div>
                 ))}
             </div>
-            <div className="flex flex-col gap-4 relative">
-              <div
-                onClick={handeDropdown}
-                className="flex justify-between w-full p-4 border-2 border-slate-200 rounded-lg">
-                <p>Select your voucher</p>
-                <ChevronDown color="blue" />
-              </div>
-              {voucher && isTicketDropdown && (
-                <div className="absolute top-16 w-full rounded-lg bg-slate-300">
-                  {voucher.map((v: Voucher, index) => (
-                    <div
-                      key={index}
-                      className="p-2 border-b border-gray-200"
-                      onClick={() => handleSelectedVoucher(v)}>
-                      <p>{v.name}</p>
-                      <p>{v.discountPercentage}% discount</p>
-                    </div>
-                  ))}
+            {!isFreeEvent ? (
+              <div className="flex flex-col gap-4 relative">
+                <div
+                  onClick={handeDropdown}
+                  className="flex justify-between w-full p-4 border-2 border-slate-200 rounded-lg">
+                  <p>Select your voucher</p>
+                  <ChevronDown color="blue" />
                 </div>
-              )}
-              {formik.values.selectedVoucherId && voucher && (
-                <div className="mt-2 p-2 border border-gray-300 rounded-lg">
-                  <p>Selected Voucher:</p>
-                  {(() => {
-                    const selectedVoucher = voucher.find(
-                      (v) => v.id === formik.values.selectedVoucherId
-                    );
-                    if (selectedVoucher) {
-                      return (
-                        <>
-                          <p>{selectedVoucher.name}</p>
-                          <p>{selectedVoucher.discountPercentage}% discount</p>
-                          <p>
-                            Expires on:{" "}
-                            {new Date(
-                              selectedVoucher.expiryDate
-                            ).toLocaleDateString()}
-                          </p>
-                        </>
+                {voucher && isTicketDropdown && (
+                  <div className="absolute top-16 w-full rounded-lg bg-slate-300">
+                    {voucher.map((v: Voucher, index) => (
+                      <div
+                        key={index}
+                        className="p-2 border-b border-gray-200"
+                        onClick={() => handleSelectedVoucher(v)}>
+                        <p>{v.name}</p>
+                        <p>{v.discountPercentage}% discount</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {formik.values.selectedVoucherId && voucher && (
+                  <div className="mt-2 p-2 border border-gray-300 rounded-lg">
+                    <p>Selected Voucher:</p>
+                    {(() => {
+                      const selectedVoucher = voucher.find(
+                        (v) => v.id === formik.values.selectedVoucherId
                       );
-                    }
-                    return null;
-                  })()}
+                      if (selectedVoucher) {
+                        return (
+                          <>
+                            <p>{selectedVoucher.name}</p>
+                            <p>
+                              {selectedVoucher.discountPercentage}% discount
+                            </p>
+                            <p>
+                              Expires on:{" "}
+                              {new Date(
+                                selectedVoucher.expiryDate
+                              ).toLocaleDateString()}
+                            </p>
+                          </>
+                        );
+                      }
+                      return null;
+                    })()}
+                  </div>
+                )}
+                <div className="flex flex-col gap-4">
+                  <p className="font-medium">
+                    Your points: <strong>{formattedPoints}</strong>
+                  </p>
+                  <div className="flex gap-4">
+                    <button
+                      type="button"
+                      className="border-2 border-grey-opacity rounded-lg w-6 h-6"
+                      onClick={() => {
+                        formik.setFieldValue(
+                          "usePoints",
+                          !formik.values.usePoints
+                        );
+                        setIsCheckBox(!isCheckBox);
+                      }}>
+                      {isCheckBox && <Check color="blue" />}
+                    </button>
+                    <p>Use your points</p>
+                  </div>
                 </div>
-              )}
-              <div className="flex flex-col gap-4">
-                <p className="font-medium">
-                  Your points: <strong>{formattedPoints}</strong>
-                </p>
-                <div className="flex gap-4">
-                  <button
-                    type="button"
-                    className="border-2 border-grey-opacity rounded-lg w-6 h-6"
-                    onClick={() => {
-                      formik.setFieldValue(
-                        "usePoints",
-                        !formik.values.usePoints
-                      );
-                      setIsCheckBox(!isCheckBox);
-                    }}>
-                    {isCheckBox && <Check color="blue" />}
-                  </button>
-                  <p>Use your points</p>
-                </div>
+                <button
+                  onClick={handleModalOpen}
+                  type="submit"
+                  className="btn btn-primary w-full">
+                  Buy Ticket
+                </button>
               </div>
+            ) : (
               <button
                 onClick={handleModalOpen}
-                type="button"
+                type="submit"
                 className="btn btn-primary w-full">
-                Buy Ticket
+                Get Free Ticket
               </button>
-            </div>
+            )}
           </div>
         </div>
       </form>
       {buyTicketData ? (
         <ModalBuyTicket
           voucher={voucher?.find((v) => v.id === buyTicketData.voucherId)}
-          finalCheckoutData={buyTicketData}
+          finalCheckoutData={!isFreeEvent ? buyTicketData : null}
+          finalFreeCheckoutData={isFreeEvent ? buyFreeTicketData : null}
           idModal="buy-ticket"
           eventTicket={eventTicket as EventTicketItem[]}
           userPoints={profile?.points || 0}
+          isFreeEvent={isFreeEvent}
           {...(eventDetails as Event)}
         />
       ) : null}

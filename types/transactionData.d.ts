@@ -7,3 +7,9 @@ interface TransactionData {
   items: TransactionItem[];
   usePoints: boolean;
 }
+
+interface TransactionFreeData {
+  userId: number;
+  eventId: number;
+  eventTicketId: number;
+}

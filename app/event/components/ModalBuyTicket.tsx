@@ -4,17 +4,19 @@ import FormBuyTicket from "./FormBuyTicket";
 import { Event } from "@/types/events";
 import { formatToIDR } from "@/utils/formatToIDR";
 import { Voucher } from "@/types/voucher";
-import { TransactionData } from "@/types/transactionData";
+import { TransactionData, TransactionFreeData } from "@/types/transactionData";
 import { EventTicketItem } from "@/types/eventTicket";
 import transactionAPI from "@/api/transaction/transactionAPI";
 import { useRouter } from "next/navigation";
 
 interface ModalProps extends Event {
   idModal: string;
-  finalCheckoutData: TransactionData;
+  finalCheckoutData?: TransactionData | null;
+  finalFreeCheckoutData?: TransactionFreeData | null;
   voucher?: Voucher;
   eventTicket: EventTicketItem[];
   userPoints: number;
+  isFreeEvent: boolean;
 }
 
 const ModalBuyTicket: React.FC<ModalProps> = (props) => {
@@ -29,6 +31,8 @@ const ModalBuyTicket: React.FC<ModalProps> = (props) => {
     voucher,
     eventTicket,
     userPoints,
+    finalFreeCheckoutData,
+    isFreeEvent,
   } = props;
 
   const router = useRouter();
@@ -43,9 +47,19 @@ const ModalBuyTicket: React.FC<ModalProps> = (props) => {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await transactionAPI.createTransactions(finalCheckoutData);
-      router.push("/");
-      console.log(result);
+      if (finalCheckoutData) {
+        const result = await transactionAPI.createTransactions(
+          finalCheckoutData
+        );
+        router.push("/");
+        console.log(result);
+      } else {
+        const result = await transactionAPI.createFreeTransactions(
+          finalFreeCheckoutData as TransactionFreeData
+        );
+        router.push("/");
+        console.log(result);
+      }
     } catch (err) {
       setError("Failed to create transaction. Please Try Again");
     } finally {
@@ -55,31 +69,39 @@ const ModalBuyTicket: React.FC<ModalProps> = (props) => {
 
   // TODO: Calculate estimated final price to show inside the modal
   useEffect(() => {
-    const calculatedTotalPrice = finalCheckoutData.items.reduce((sum, item) => {
-      const ticket = eventTicket?.find((t) => t.id === item.eventTicketId);
-      return sum + (ticket?.price || 0) * item.quantity;
-    }, 0);
-    setTotalPrice(calculatedTotalPrice);
+    if (isFreeEvent) {
+      setTotalPrice(0);
+      setVoucherDiscount(0);
+      setPointDiscount(0);
+      setFinalPrice(0);
+    } else {
+      const transactionData = finalCheckoutData as TransactionData;
+      const calculatedTotalPrice = transactionData.items.reduce((sum, item) => {
+        const ticket = eventTicket?.find((t) => t.id === item.eventTicketId);
+        return sum + (ticket?.price || 0) * item.quantity;
+      }, 0);
+      setTotalPrice(calculatedTotalPrice);
 
-    // calculate voucher discount
-    if (voucher) {
-      const discount =
-        (calculatedTotalPrice * voucher.discountPercentage) / 100;
-      setVoucherDiscount(discount);
-    }
+      // calculate voucher discount
+      if (voucher) {
+        const discount =
+          (calculatedTotalPrice * voucher.discountPercentage) / 100;
+        setVoucherDiscount(discount);
+      }
 
-    //calculate points discount
-    if (finalCheckoutData.usePoints) {
-      const maxPointsDiscount = Math.min(userPoints, calculatedTotalPrice);
-      setPointDiscount(maxPointsDiscount);
+      //calculate points discount
+      if (transactionData.usePoints) {
+        const maxPointsDiscount = Math.min(userPoints, calculatedTotalPrice);
+        setPointDiscount(maxPointsDiscount);
+      }
+
+      const calculatedFinalPrice = Math.max(
+        calculatedTotalPrice - voucherDiscount - pointDiscount,
+        0
+      );
+      setFinalPrice(calculatedFinalPrice);
     }
-  }, [
-    finalCheckoutData.items,
-    finalCheckoutData.usePoints,
-    voucher,
-    eventTicket,
-    userPoints,
-  ]);
+  }, [eventTicket, finalCheckoutData, isFreeEvent, userPoints, voucher]);
 
   useEffect(() => {
     const calculatedFinalPrice = Math.max(
@@ -115,57 +137,74 @@ const ModalBuyTicket: React.FC<ModalProps> = (props) => {
         </div>
         <div className="flex flex-col gap-4 divide-y-2 divide-dashed">
           <h3 className="text-xl font font-semibold mt-2">Your Order</h3>
-          {finalCheckoutData.items.map((item, index) => {
-            const ticket = eventTicket?.find(
-              (t) => t.id === item.eventTicketId
-            );
-            return (
-              <div key={index} className="flex flex-col gap-2">
-                <p className="font-semibold">Ticket Type</p>
-                <div className="flex justify-between items-center">
-                  <div className="flex flex-col gap-0">
-                    <p className="text-sm">{ticket?.ticketType}</p>
-                    <p className="text-xs text-gray-500">
-                      Qty: {item.quantity}
+          {isFreeEvent ? (
+            <div className="flex flex-col gap-2">
+              <p className="font-semibold">Free Event Ticket</p>
+              <div className="flex justify-between items-center">
+                <p className="text-sm">{eventTicket[0]?.ticketType}</p>
+                <p className="text-sm">FREE</p>
+              </div>
+            </div>
+          ) : (
+            finalCheckoutData &&
+            "items" in finalCheckoutData &&
+            finalCheckoutData.items.map((item, index) => {
+              const ticket = eventTicket?.find(
+                (t) => t.id === item.eventTicketId
+              );
+              return (
+                <div key={index} className="flex flex-col gap-2">
+                  <p className="font-semibold">Ticket Type</p>
+                  <div className="flex justify-between items-center">
+                    <div className="flex flex-col gap-0">
+                      <p className="text-sm">{ticket?.ticketType}</p>
+                      <p className="text-xs text-gray-500">
+                        Qty: {item.quantity}
+                      </p>
+                    </div>
+                    <p className="text-sm">
+                      {formatToIDR((ticket?.price || 0) * item.quantity)}
                     </p>
                   </div>
-                  <p className="text-sm">
-                    {formatToIDR((ticket?.price || 0) * item.quantity)}
-                  </p>
                 </div>
-              </div>
-            );
-          })}
-          {voucher && (
+              );
+            })
+          )}
+          {!isFreeEvent && voucher && (
             <div className="flex flex-col gap-2">
               <p className="font-semibold">Voucher Applied</p>
               <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-0">
                   <p className="text-sm">{voucher.name}</p>
                   <p className="text-xs text-gray-500">
-                    Discount: {voucher.discountPercentage}
+                    Discount: {voucher.discountPercentage}%
                   </p>
                 </div>
                 <p className="text-sm">{formatToIDR(-voucherDiscount)}</p>
               </div>
             </div>
           )}
-          {finalCheckoutData.usePoints && (
-            <div className="flex flex-col gap-2">
-              <p className="font-semibold">Points Applied</p>
-              <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-0">
-                  <p className="text-xs text-gray-500">
-                    Points: {pointDiscount}
-                  </p>
+          {!isFreeEvent &&
+            finalCheckoutData &&
+            "usePoints" in finalCheckoutData &&
+            finalCheckoutData.usePoints && (
+              <div className="flex flex-col gap-2">
+                <p className="font-semibold">Points Applied</p>
+                <div className="flex justify-between items-center">
+                  <div className="flex flex-col gap-0">
+                    <p className="text-xs text-gray-500">
+                      Points: {pointDiscount}
+                    </p>
+                  </div>
+                  <p className="text-sm">{formatToIDR(-pointDiscount)}</p>
                 </div>
-                <p className="text-sm">{formatToIDR(-pointDiscount)}</p>
               </div>
-            </div>
-          )}
+            )}
           <div className="flex justify-between pt-2 gap-2">
             <p className="font-semibold">Total</p>
-            <p className="text-sm">{formatToIDR(finalPrice)}</p>
+            <p className="text-sm">
+              {isFreeEvent ? "FREE" : formatToIDR(finalPrice)}
+            </p>
           </div>
         </div>
         <button

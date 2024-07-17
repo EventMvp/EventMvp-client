@@ -15,8 +15,9 @@ export interface Event {
   time: string;
   location: string;
   category: category;
+  picture: string;
   organizer: string;
-  price: number;
+  priceRange: string;
   available_seats: number;
   ticket_type: TicketType;
 }

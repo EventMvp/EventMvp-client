@@ -1,8 +1,20 @@
+"use client";
+
 import GenericForm from "@/components/Form/GenericForm";
 import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 
 const FormSignIn = () => {
+  const router = useRouter();
+  const query = useSearchParams();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const initialValues = {
     email: "",
     password: "",
@@ -14,12 +26,25 @@ const FormSignIn = () => {
   });
 
   const handleSubmit = async (values: any) => {
+    if (!isClient) return;
+
     const result = await signIn("credentials", {
       username: values.email,
       password: values.password,
-      redirect: true,
-      callbackUrl: "/",
+      redirect: false,
     });
+
+    if (result?.ok) {
+      const callbackUrl = query?.get("callbackUrl");
+
+      if (callbackUrl) {
+        router.push(decodeURIComponent(callbackUrl));
+      } else {
+        router.push("/");
+      }
+    } else {
+      alert("Invalid credentials!!");
+    }
   };
 
   const fields = [
