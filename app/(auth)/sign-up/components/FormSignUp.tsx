@@ -1,4 +1,4 @@
-import { addUser } from "@/api/createUser";
+import { addUser } from "@/api/user/createUser";
 import GenericForm from "@/components/Form/GenericForm";
 import { Register } from "@/types/register";
 import * as Yup from "yup";

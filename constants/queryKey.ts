@@ -7,3 +7,4 @@ export const GET_EVENT_BY_ID = "get-event-id";
 export const GET_PROFILE = "get-profile";
 export const GET_EVENT_TICKET = "get-event-ticket";
 export const GET_VOUCHER = "get-vouchers";
+export const GET_PURCHASED_EVENT = "get-purchased-events";

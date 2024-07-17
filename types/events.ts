@@ -28,3 +28,28 @@ export interface ResponseGetEvent {
   totalElements: number;
   content: Event[];
 }
+
+interface TicketPurchased {
+  ticketType: string;
+  quantity: number;
+  price: number;
+  totalPrice: number;
+}
+
+export interface TransactionResponse {
+  upcomingEvents: PurchasedEvents[];
+  pastEvent: PurchasedEvents[];
+}
+
+export interface PurchasedEvents {
+  transactionId: number;
+  eventId: number;
+  eventTitle: string;
+  eventDate: string;
+  eventTime: [number, number];
+  eventLocation: string;
+  eventPicture: string;
+  totalAmount: number;
+  purchaseDate: string;
+  tickets: TicketPurchased[];
+}

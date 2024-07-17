@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { cookies } from "next/headers";
 import { config } from "./constants/url";
@@ -14,11 +14,7 @@ interface DecodedToken {
   userId: number; // User ID
 }
 
-interface UserSession {
-  id: string;
-  email: string;
-  role: string;
-}
+interface UserSession extends User {}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -85,6 +81,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   session: {
-    maxAge: 3600,
+    maxAge: 12 * 60 * 60,
   },
 });

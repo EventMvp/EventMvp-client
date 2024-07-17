@@ -6,19 +6,34 @@ import Link from "next/link";
 import BackButton from "../../components/BackButton";
 import useProfileDetails from "@/hooks/useProfileDetails";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import useTransaction from "@/hooks/useTransaction";
+import usePurchasedEvents from "@/hooks/usePurchasedEvents";
 
 const ProfilePage = () => {
   const { data, isLoading, error } = useProfileDetails();
   const [copied, setCopied] = useState(false);
+  const { data: session } = useSession();
+  const role = session?.user.role;
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error {error.message}</div>;
+  const { purchasedEvent, isLoadingPurchasedEvent, errorPurchased } =
+    usePurchasedEvents();
+
+  console.log(purchasedEvent);
+
+  if (isLoading || isLoadingPurchasedEvent) return <div>Loading...</div>;
+  if (error || errorPurchased)
+    return error ? (
+      <div>{error.message}</div>
+    ) : (
+      <div>{errorPurchased?.message}</div>
+    );
 
   const copyToClipboard = () => {
     if (data?.referralCode) {
       navigator.clipboard.writeText(data.referralCode).then(() => {
         setCopied(true);
-        setTimeout(() => setCopied(false), 2500); // Reset copied state after 2 seconds
+        setTimeout(() => setCopied(false), 2500);
       });
     }
   };
@@ -54,22 +69,43 @@ const ProfilePage = () => {
           </p>
           <p className="font-semibold">Your Points: {data?.points}</p>
         </div>
-        <div className="btn btn-primary text-white">Create your Event</div>
+        {role && role === "ORGANIZER" ? (
+          <Link href={"/event/create-event"} passHref legacyBehavior>
+            <a target="_blank">
+              <div className="btn btn-primary text-white">
+                Create your Event
+              </div>
+            </a>
+          </Link>
+        ) : (
+          <div className="w-full p-2 flex justify-center items-center border-2 border-grey-opacity rounded-lg">
+            <p className="text-xs font-light">
+              Want to create your own event? Register to become{" "}
+              <Link href={"/sign-up"} passHref legacyBehavior>
+                <a target="_blank">
+                  <strong className="underline">Organizer</strong>
+                </a>
+              </Link>
+            </p>
+          </div>
+        )}
       </div>
       <div className="flex flex-col p-4 gap-4 w-full">
         <div className="">
           <h1 className="font-semibold">Upcoming Events</h1>
           <div className="flex flex-col gap-4 p-4">
-            <CardEvent />
-            <CardEvent />
-            <CardEvent />
+            {purchasedEvent?.upcomingEvents?.map((event) => (
+              <CardEvent key={event.eventId} {...event} />
+            ))}
           </div>
-          <h1 className="font-semibold">Upcoming Events</h1>
-          <div className="flex flex-col gap-4 p-4">
-            <CardEvent />
-            <CardEvent />
-            <CardEvent />
-          </div>
+          <h1 className="font-semibold">Past Events</h1>
+          {purchasedEvent?.pastEvent ? (
+            <div className="flex flex-col gap-4 p-4">
+              {purchasedEvent.pastEvent.map((event) => (
+                <CardEvent key={event.eventId} {...event} />
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

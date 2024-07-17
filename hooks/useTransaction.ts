@@ -1,16 +1,23 @@
 import { getEventTicketByEventId } from "@/api/events/getEventTicketByEventId";
+import transactionAPI from "@/api/transaction/transactionAPI";
 import { voucherAPI } from "@/api/voucher/voucherAPI";
-import { GET_EVENT_TICKET, GET_VOUCHER } from "@/constants/queryKey";
+import {
+  GET_EVENT_TICKET,
+  GET_PURCHASED_EVENT,
+  GET_VOUCHER,
+} from "@/constants/queryKey";
+import { TransactionResponse } from "@/types/events";
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 
-const useTransaction = (eventId: string) => {
+const useTransaction = (eventId?: string) => {
   const {
     data: eventTicket,
     isLoading: isLoadingEventTicket,
     error: errorEventTicket,
   } = useQuery({
-    queryKey: [GET_EVENT_TICKET],
-    queryFn: async () => await getEventTicketByEventId(eventId),
+    queryKey: [GET_EVENT_TICKET, eventId],
+    queryFn: async () => await getEventTicketByEventId(eventId as string),
   });
 
   const {
@@ -19,7 +26,8 @@ const useTransaction = (eventId: string) => {
     error: errorVoucher,
   } = useQuery({
     queryKey: [GET_VOUCHER],
-    queryFn: async () => await voucherAPI.getVoucherByEventId(eventId),
+    queryFn: async () =>
+      await voucherAPI.getVoucherByEventId(eventId as string),
   });
 
   return {
