@@ -23,7 +23,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         username: { label: "Email", type: "text", placeholder: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<User | null> {
         const res = await fetch(config.BASE_URL + config.endpoints.login, {
           method: "POST",
           headers: {
@@ -52,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // decode jwt
         const decoded = jwtDecode<DecodedToken>(user.token);
         return {
-          id: decoded.userId,
+          id: decoded.userId.toString(),
           email: decoded.sub,
           role: decoded.scope,
         };

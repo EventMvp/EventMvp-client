@@ -1,9 +1,11 @@
 import { addUser } from "@/api/user/createUser";
 import GenericForm from "@/components/Form/GenericForm";
 import { Register } from "@/types/register";
+import { useRouter } from "next/navigation";
 import * as Yup from "yup";
 
 const FormSignUp = () => {
+  const router = useRouter();
   const initialValues = {
     name: "",
     email: "",
@@ -44,13 +46,11 @@ const FormSignUp = () => {
       console.log("Submitting values:", values);
       const newUser = await addUser({
         ...values,
-        name: "admin-noref123",
       });
       console.log("New user added:", newUser);
-      // Handle successful user addition (e.g., show success message, redirect)
+      router.push("/");
     } catch (error) {
       console.error("Error in handleSubmit:", error);
-      // Handle error (e.g., show error message to user)
     }
   };
 
